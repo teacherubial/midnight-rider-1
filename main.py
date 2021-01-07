@@ -77,7 +77,7 @@ def type_text_output(string):
 
 
 def main():
-    type_text_output(INTRODUCTION)
+    # type_text_output(INTRODUCTION)
 
     # CONSTANTS
     MAX_FUEL_LEVEL = 50
@@ -96,6 +96,8 @@ def main():
 
     # MAIN LOOP
     while not done:
+
+
         # Random events
         # FIDO - refills your food (5%)
         if tofu < 3 and random.random() < 0.05:
@@ -106,7 +108,6 @@ def main():
             print("******** It is filled magically.")
             print("******** \"You're welcome!'\", says a small voice.")
             print("******** The dog used its magic tofu cooking skills.")
-
 
         # Check if reached END GAME
         # WIN - Travelled the Distance Req'd
@@ -193,11 +194,12 @@ def main():
         elif user_choice == "q":
             done = True
 
+        # HUNGER
+        if user_choice not in ["a", "e"]:
+            hunger += random.randrange(5, 13)
+
         time.sleep(1.5)
 
-        # TODO: Change the environment based on
-        #       user choice, and RNG
-        # TODO: Random event generator
 
     # Outro
     print("Thanks for playing. Play again soon!")
