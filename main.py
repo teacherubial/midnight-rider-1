@@ -55,6 +55,79 @@ YOU'VE SEEN IT BEFORE, BUT ONLY ON TV.
 ----GAME OVER----
 """
 
+LOSE_HUNGER = """
+
+YOUR STOMACH IS EMPTY.
+WHO KNEW THAT WHAT THE DOCTOR SAID WAS TRUE,
+THAT HUMAN/ROBOT HYBRIDS WOULD NEED
+TOFU TO SUSTAIN THEMSELVES.
+
+YOUR ROBOT SYSTEMS START TO SHUT DOWN.
+YOUR HUMAN EYES CLOSE.
+
+THE LAST THING THAT YOU HEAR ARE SIRENS.
+THEY GOTCHU. THEY GOT THE CAR.
+WE FAILED...
+
+
+
+----GAME OVER----
+"""
+
+LOSE_AGENTS = """
+
+THE AGENTS HAVE CLOSED IN ON YOU.
+THERE ARE AT LEAST 20 CARS SURROUNDING YOU.
+THE LEAD CAR BUMPS YOUR PASSENGER SIDE.
+YOU MANAGE TO CORRECT YOUR STEERING
+TO KEEP YOU FROM CRASHING.
+
+YOU DIDN'T SEE THE AGENT'S CAR BESIDE YOU.
+THE DRIVER BUMPS YOUR CAR.
+AND THAT'S IT.
+
+YOU SPIN UNCONTROLLABLY.
+THE CAR FLIPS OVER AT LEAST TWO TIMES.
+OR MORE... YOU SEEM TO HAVE LOST COUNT.
+
+SIRENS.
+
+"ARE THEY ALIVE?" THEY SAY AS YOU HEAR
+FOOTSTEPS GETTING CLOSER.
+"DOESN'T MATTER, ALL WE WANTED WAS THE CAR.
+
+YOU SEE A DOG SLOWLY STEP OUT OF THE
+OVERTURNED CAR.
+
+"YOU WILL NEVER STOP THE REVOLUTION,"
+THE DOG SEEMS TO SAY TO THE OFFICERS.
+
+IT WAS IN THE CAR THE WHOLE TIME.
+
+YOU DRIFT OFF INTO UNCONSCIOUSNESS.
+
+
+----GAME OVER----
+"""
+
+LOSE_FUEL = """
+
+YOUR CAR SPUTTERS AND SEEMS TO LET OUT
+A BIG SIGH. THERE'S NO MORE FUEL LEFT.
+
+THE COPS SURROUND YOU AND THEY STEP
+OUT OF THEIR CARS. THE LEAD AGENT
+RIPS THE DOOR OPEN AND THROWS YOU OUT
+OF THE CAR.
+
+"WE FINALLY GOT IT."
+
+YOU FAILED.
+
+
+----GAME OVER----
+"""
+
 CHOICES = """
     ----
     A. Eat a piece of tofu.
@@ -83,21 +156,21 @@ def main():
     MAX_FUEL_LEVEL = 50
     MAX_DISTANCE_TRAVELLED = 100
     MAX_TOFU = 3
+    MAX_HUNGER = 50
+    STARTING_AGENTS_DISTANCE = -20
 
     # Variables
     done = False
 
     kms_travelled = 0
-    agents_distance = -20   # 0 is the end
+    agents_distance = STARTING_AGENTS_DISTANCE
     turns = 0
     tofu = MAX_TOFU
-    fuel = MAX_FUEL_LEVEL
+    fuel = 1
     hunger = 0
 
     # MAIN LOOP
     while not done:
-
-
         # Random events
         # FIDO - refills your food (5%)
         if tofu < 3 and random.random() < 0.05:
@@ -109,15 +182,27 @@ def main():
             print("******** \"You're welcome!'\", says a small voice.")
             print("******** The dog used its magic tofu cooking skills.")
 
-        # Check if reached END GAME
+        # END GAME
         # WIN - Travelled the Distance Req'd
         if kms_travelled > MAX_DISTANCE_TRAVELLED:
             time.sleep(2)
             type_text_output(WIN)
             break
-        # TODO: LOSE - by hunger > MAX_HUNGER (50)
+        # LOSE - by hunger > MAX_HUNGER (50)
         elif hunger > MAX_HUNGER:
-            pass
+            time.sleep(2)
+            type_text_output(LOSE_HUNGER)
+            break
+        # LOSE - agents reached you
+        elif agents_distance >= 0:
+            time.sleep(2)
+            type_text_output(LOSE_AGENTS)
+            break
+        # LOSE - fuel runs out
+        elif fuel <= 0:
+            time.sleep(2)
+            type_text_output(LOSE_FUEL)
+            break
 
         # DISPLAY HUNGER
         if hunger > 40:
@@ -147,7 +232,7 @@ def main():
                 print()
         elif user_choice == "b":
             # SLOW
-            players_distance_now = random.randrange(7, 15)
+            players_distance_now = random.randrange(4, 12)
             agents_distance_now = random.randrange(7, 15)
 
             # Burn fuel
@@ -204,16 +289,21 @@ def main():
             print(f"\t--------\n")
         elif user_choice == "q":
             done = True
+        else:
+            print("\tPlease choose a valid choice.")
 
-        # HUNGER
-        if user_choice not in ["a", "e"]:
+        # UPKEEP
+        if user_choice in ["b", "c", "d"]:
             hunger += random.randrange(8, 18)
+            turns += 1
 
         time.sleep(1.5)
 
 
     # Outro
+    print()
     print("Thanks for playing. Play again soon!")
+    print(f"You finished the game in {turns} turns.")
 
 
 if __name__ == "__main__":
