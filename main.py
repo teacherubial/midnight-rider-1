@@ -115,6 +115,17 @@ def main():
             time.sleep(2)
             type_text_output(WIN)
             break
+        # TODO: LOSE - by hunger > MAX_HUNGER (50)
+        elif hunger > MAX_HUNGER:
+            pass
+
+        # DISPLAY HUNGER
+        if hunger > 40:
+            print("******** Your stomach rumbles. You need to eat something soon.")
+            time.sleep(1)
+        elif hunger > 25:
+            print("******** Your hunger is small but manageable.")
+            time.sleep(1)
 
         # Present the user their choices
         print(CHOICES)
@@ -196,7 +207,7 @@ def main():
 
         # HUNGER
         if user_choice not in ["a", "e"]:
-            hunger += random.randrange(5, 13)
+            hunger += random.randrange(8, 18)
 
         time.sleep(1.5)
 
